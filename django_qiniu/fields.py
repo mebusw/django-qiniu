@@ -111,6 +111,12 @@ class QiNiuFileField(models.TextField):
         super(QiNiuFileField, self).contribute_to_class(cls, name)
         setattr(cls, self.name, self.descriptor_class(self))
 
+    def _get_val_from_obj(self, obj):
+        if obj is not None:
+            return getattr(obj, self.attname).url
+        else:
+            return self.get_default()
+
     def get_uptoken(self):
         policy = qiniu.rs.PutPolicy(self.upload_bucket)
         return policy.token()
