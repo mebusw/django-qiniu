@@ -119,7 +119,10 @@ class QiNiuFileField(models.TextField):
 
     def get_db_prep_value(self, value, connection, prepared=False):
         if not prepared:
-            value = self.get_prep_value(value.url)
+            if hasattr(value, 'url'):
+                value = self.get_prep_value(value.url)
+            else:
+                value = self.get_prep_value(value)
         return value
 
     def get_uptoken(self):
