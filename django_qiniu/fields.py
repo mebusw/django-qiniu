@@ -117,6 +117,11 @@ class QiNiuFileField(models.TextField):
         else:
             return self.get_default()
 
+    def get_db_prep_value(self, value, connection, prepared=False):
+        if not prepared:
+            value = self.get_prep_value(value.url)
+        return value
+
     def get_uptoken(self):
         policy = qiniu.rs.PutPolicy(self.upload_bucket)
         return policy.token()
